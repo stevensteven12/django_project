@@ -12,6 +12,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import CDN
 from bokeh.embed import file_html
+import time
 
 
 from .models import Question
@@ -85,6 +86,23 @@ def index_2(request):
     # Feed them to the Django template.
     return render_to_response('stock_api/index_1.html',
                               {'script': script, 'div': div})
+
+def menu(request):
+    food = {'name': '番茄炒蛋', 'price': 60, 'comment': '好吃', 'is_spicy': False}
+    return render_to_response('stock_api/menu.html', locals())
+
+def draw_line(request):
+    with open('stock_api/IndexTable_TX00.Txt') as f:
+        lines = f.readlines()
+    f.close()
+
+    return render_to_response('stock_api\draw_line.html', {'mylist': lines})
+
+""""
+for i in range(10):
+    index_2()
+    time.sleep(1)
+"""
 
 """
 def detail(request, question_id):
