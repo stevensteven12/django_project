@@ -92,11 +92,56 @@ def menu(request):
     return render_to_response('stock_api/menu.html', locals())
 
 def draw_line(request):
+    """"
     with open('stock_api/IndexTable_TX00.Txt') as f:
         lines = f.readlines()
     f.close()
+"""
+    words= []
+    wholeline= []
+    x= []
+    y = []
+    with open('stock_api/IndexTable_TX00.Txt') as f:
+        for line in f:
+            word = line.split(",")
+            wholeline.append(line)
+            words.append(word[0])
+            x.append(word[0])
+            y.append(word[4])
 
-    return render_to_response('stock_api\draw_line.html', {'mylist': lines})
+    return render_to_response('stock_api\draw_line.html', {'mylist': words, 'line_list': wholeline, 'x': x, 'y': y})
+
+
+def draw_line_2(request):
+    words = []
+    x = []
+    y = []
+    with open('stock_api/IndexTable_TX00.Txt') as f:
+        for line in f:
+            word = line.split(",")
+            words.append(word[0])
+            x.append(word[0])
+            y.append(word[4])
+
+    title = 'y = f(x)'
+    plot = figure(title=title,
+                  x_axis_label='X-Axis',
+                  y_axis_label='Y-Axis',
+                  plot_width=400,
+                  plot_height=400)
+
+    plot.line(x, y, legend='f(x)', line_width=2)
+    # Store components
+    script, div = components(plot)
+
+    html = file_html(plot, CDN, "stock_api/line_2.html")
+    new_path = 'stock_api/templates/stock_api/line_2.html'
+    new_file = open(new_path, 'w')
+    new_file.write(html)
+
+    # Feed them to the Django template.
+    return render_to_response('stock_api/line_2.html',
+                              {'script': script, 'div': div})
 
 """"
 for i in range(10):
