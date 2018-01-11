@@ -22,6 +22,7 @@ urlpatterns = [
     path('menu', views.menu, name='menu'),
     path('draw_line', views.draw_line, name='draw_line'),
     path('draw_line_2', views.draw_line_2, name='draw_line_2'),
+    path('draw_line_3', views.draw_line_3, name='draw_line_3'),
     path('<int:question_id>/', views.detail, name='detail'),
     path('<int:question_id>/results/', views.results, name='results'),
     path('<int:question_id>/vote/', views.vote, name='vote'),

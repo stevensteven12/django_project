@@ -6,13 +6,15 @@ from django.shortcuts import render
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, HttpResponseRedirect
 
 from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import CDN
 from bokeh.embed import file_html
 import time
+import threading
+from .tasks import myTask
 
 
 from .models import Question
@@ -88,7 +90,13 @@ def index_2(request):
                               {'script': script, 'div': div})
 
 def menu(request):
-    food = {'name': '番茄炒蛋', 'price': 60, 'comment': '好吃', 'is_spicy': False}
+#    food = {'name': '番茄炒蛋', 'price': 60, 'comment': '好吃', 'is_spicy': False}
+#    return render_to_response('stock_api/menu.html', locals())
+
+    food1 = {'name': '番茄炒蛋', 'price': 60, 'comment': '好吃', 'is_spicy': False}
+    food2 = {'name': '蒜泥白肉', 'price': 100, 'comment': '人氣推薦', 'is_spicy': True}
+    foods = [food1, food2]
+#    foods = []
     return render_to_response('stock_api/menu.html', locals())
 
 def draw_line(request):
@@ -139,9 +147,20 @@ def draw_line_2(request):
     new_file = open(new_path, 'w')
     new_file.write(html)
 
+    myTask()
     # Feed them to the Django template.
     return render_to_response('stock_api/line_2.html',
                               {'script': script, 'div': div})
+
+
+def draw_line_3(request):
+    threading.Timer(5.0, draw_line_2).start()
+    print
+    "Hello, World!"
+
+
+
+#    return HttpResponseRedirect("draw_line_2")
 
 """"
 for i in range(10):
